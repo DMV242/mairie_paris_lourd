@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, TouchableOpacity, Alert, StatusBar, ScrollView, Dimensions, Platform } from 'react-native';
-import { Avatar, Text, Card, Button, Divider, Appbar, ActivityIndicator, IconButton, Surface, Chip } from 'react-native-paper';
+import { View, StyleSheet, Alert, StatusBar, ScrollView, Dimensions, } from 'react-native';
+import { Avatar, Text, Button, Divider, Appbar, ActivityIndicator, IconButton, Surface, Chip } from 'react-native-paper';
 import { getUserData, logout, fetchUserProfile, getUserTeams, getUserStats } from '../services/authService';
 import * as Animatable from 'react-native-animatable';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -28,7 +28,6 @@ const ProfileScreen = ({ navigation }) => {
             const userData = await getUserData();
             if (userData) {
                 setUser(userData);
-
                 // Initialiser les statistiques avec les données de l'utilisateur
                 if (userData.stats) {
                     setStats({
@@ -324,6 +323,7 @@ const styles = StyleSheet.create({
     appbarTitle: {
         fontSize: 20,
         fontWeight: 'bold',
+        color: '#FFFFFF',
     },
     loadingContainer: {
         flex: 1,

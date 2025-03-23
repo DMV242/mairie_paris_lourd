@@ -200,6 +200,37 @@ export const getUserStats = async () => {
         // Extraire les informations pertinentes pour les statistiques
         const userDetails = response.data;
 
+        // Récupérer les équipes de l'utilisateur pour obtenir les projets associés
+        const teamsResponse = await apiClient.get(`/teams/?user=${userId}`);
+        const teams = Array.isArray(teamsResponse.data) ?
+            teamsResponse.data : (teamsResponse.data.results || []);
+
+        // Récupérer les projets liés aux équipes de l'utilisateur
+        let projectsCount = 0;
+
+        if (teams.length > 0) {
+            // Récupérer tous les projets pour toutes les équipes de l'utilisateur
+            const projectsPromises = teams.map(team =>
+                apiClient.get(`/projects/?team=${team.id}`)
+            );
+
+            const projectsResponses = await Promise.all(projectsPromises);
+
+            // Compter les projets uniques (par ID)
+            const uniqueProjectIds = new Set();
+
+            projectsResponses.forEach(response => {
+                const projects = Array.isArray(response.data) ?
+                    response.data : (response.data.results || []);
+
+                projects.forEach(project => {
+                    uniqueProjectIds.add(project.id);
+                });
+            });
+
+            projectsCount = uniqueProjectIds.size;
+        }
+
         // Récupérer les tâches de l'utilisateur pour calculer les statistiques
         const tasksResponse = await apiClient.get(`/tasks/?user=${userId}`);
         const tasks = Array.isArray(tasksResponse.data) ?
@@ -207,7 +238,7 @@ export const getUserStats = async () => {
 
         // Calculer les statistiques
         const stats = {
-            projects_count: userDetails.projects_count || 0,
+            projects_count: projectsCount || userDetails.projects_count || 0,
             tasks_count: tasks.length,
             tasks_completed: tasks.filter(t => t.status?.toLowerCase() === 'terminé').length,
             tasks_in_progress: tasks.filter(t => t.status?.toLowerCase() === 'en cours').length,
