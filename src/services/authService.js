@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // Définir l'URL de base de l'API
 // Remplacez YOUR_SERVER_IP par l'adresse IP de votre serveur Django
 // Exemple: 192.168.1.10 pour un serveur local
-const API_URL = 'http://192.168.1.128:8000/api';
+const API_URL = 'http://10.3.219.51:8000/api';
 
 // Créer une instance Axios avec des configurations par défaut
 const apiClient = axios.create({
