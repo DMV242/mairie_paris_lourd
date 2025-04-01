@@ -55,13 +55,24 @@ export const getTasksByPriority = async (priority) => {
     }
 };
 
-// Récupérer les tâches avec échéances proches (7 jours)
+// Récupérer les tâches à venir (dans les 7 prochains jours)
 export const getUpcomingTasks = async () => {
     try {
         const response = await apiClient.get('/tasks/?upcoming=true');
         return response.data;
     } catch (error) {
         console.error('Erreur lors de la récupération des tâches à venir:', error);
+        throw error;
+    }
+};
+
+// Récupérer les tâches en retard (date échue et non terminées)
+export const getOverdueTasks = async () => {
+    try {
+        const response = await apiClient.get('/tasks/?overdue=true');
+        return response.data;
+    } catch (error) {
+        console.error('Erreur lors de la récupération des tâches en retard:', error);
         throw error;
     }
 };
